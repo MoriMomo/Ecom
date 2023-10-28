@@ -3,17 +3,13 @@
     <div class="container">
       <div class="row">
         <div class="col-8">
-          <img
-            src="https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/441599/item/goods_57_441599.jpg?width=494"
-            alt=""
-            class=""
-          />
+          <img :src="productDetail.image" alt="" class="" />
         </div>
         <div class="col-4">
-          <p>Rp200.000</p>
-          <h3>Green Short Sleeve Shirt</h3>
+          <p>Rp{{ productDetail.price }}</p>
+          <h3>{{ productDetail.name }}</h3>
           <ul class="d-flex justify-content-center" type="none">
-            <li class="p-2">8/M</li>
+            <li class="p-2">{{ productDetail.size }}</li>
             <li class="p-2">Very Good</li>
             <li class="p-2">Denpasar</li>
           </ul>
@@ -30,11 +26,11 @@
             </ul>
 
             <ul type="none">
-              <li>Hoodies and Sweater</li>
-              <li>8/M</li>
-              <li>White</li>
-              <li>5 Hours</li>
-              <li>Rp11.000</li>
+              <li>{{ productDetail.category }}</li>
+              <li>{{ productDetail.size }}</li>
+              <li>{{ productDetail.color }}</li>
+              <li>20 Hours Ago</li>
+              <li>Rp{{ productDetail.shipping }}</li>
             </ul>
           </div>
 
@@ -60,10 +56,20 @@
 </template>
 
 <script>
-import WebHeader from "../../components/Header.vue";
-import WebFooter from "../../components/Footer.vue";
+import WebHeader from "../../../components/Header.vue";
+import WebFooter from "../../../components/Footer.vue";
 
 export default {
+  async fetch() {
+    console.log(this.$route.params.detail);
+    await this.$store.dispatch("getProductDetail", this.$route.params.details);
+    this.productDetail = this.$store.getters.getProductDetail;
+  },
+  data() {
+    return {
+      productDetail: {},
+    };
+  },
   components: {
     WebHeader,
     WebFooter,

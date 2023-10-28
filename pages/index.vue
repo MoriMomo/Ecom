@@ -9,6 +9,7 @@
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
             voluptas dolore rem similique quae.
           </p>
+
           <button class="button-banner-text">Learn More</button>
         </div>
       </div>
@@ -16,7 +17,11 @@
       <h1 class="title-product">SALE SALE SALE</h1>
       <div class="product container">
         <div class="row gy-5">
-          <product-item v-for="item in 8" :key="item"></product-item>
+          <product-item
+            v-for="product in products"
+            :key="product.id"
+            :product="product"
+          ></product-item>
         </div>
       </div>
       <div class="container"></div>
@@ -30,6 +35,15 @@ import WebFooter from "../components/Footer.vue";
 import ProductItem from "../components/product/ProductItem.vue";
 
 export default {
+  async fetch() {
+    await this.$store.dispatch("getProduct");
+    this.products = this.$store.getters.getProduct;
+  },
+  data() {
+    return {
+      products: [],
+    };
+  },
   components: {
     WebHeader,
     WebFooter,

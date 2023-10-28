@@ -7,6 +7,8 @@ const createStore = () => {
             userData: {},
             token: null,
             userKey: null,
+            product: [],
+            productDetail: {}
         },
         getters: {
             getUserData(state) {
@@ -17,6 +19,12 @@ const createStore = () => {
             },
             isAuthenticated(state) {
                 return state.token != null
+            },
+            getProduct(state) {
+                return state.product
+            },
+            getProductDetail(state) {
+                return state.productDetail
             }
         },
         mutations: {
@@ -35,11 +43,16 @@ const createStore = () => {
             },
             setUserKey(state, key) {
                 state.userKey = key
-            }
+            },
+            setProductData(state, product) {
+                state.product = product
+            },
+            setProductDetail(state, detail) {
+                state.productDetail = detail
+
+            },
         },
         actions: {
-
-
             async nuxtServerInit({ commit, dispatch }) {
                 const token = this.$cookies.get("token")
                 if (token) {
@@ -137,9 +150,32 @@ const createStore = () => {
                 } catch (error) {
                     console.log(error)
                 }
+            },
 
+            async getProduct({ commit }) {
+                try {
+                    const data = await this.$axios.$get(`/products.json`)
+                    const dataArr = []
+                    for (var i in data) {
+                        dataArr.push({ id: i, ...data[i] })
+                    }
+                    commit('setProductData', dataArr)
+                }
+                catch (error) {
+                    console.log(error)
+                }
+            },
+
+            async getProductDetail({ commit }, productId) {
+                try {
+                    const data = await this.$axios.$get(`/products/${productId}.json`)
+                    commit('setProductDetail', data)
+                }
+                catch (error) {
+                    console.log(error)
+                }
             }
-        },
+        }
 
 
 
